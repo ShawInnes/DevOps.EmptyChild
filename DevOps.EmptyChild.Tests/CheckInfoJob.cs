@@ -1,9 +1,11 @@
 ﻿using System;
+using DevOps.EmptyChild.Models;
 using NodaTime;
 using NodaTime.Testing;
 using NUnit.Framework;
 using Serilog;
 using NSubstitute;
+using RestSharp;
 
 namespace DevOps.EmptyChild.Tests
 {
@@ -11,37 +13,40 @@ namespace DevOps.EmptyChild.Tests
     public class CheckInfoJobShould
     {
         [Test]
-        public void ThrowArgumentNullExceptionOnNullLogger()
+        public void ThrowArgumentNullException()
         {
-            var clock = new FakeClock(Instant.FromDateTimeOffset(DateTimeOffset.Now));
-
             Shouldly.Should.Throw<ArgumentNullException>(() =>
             {
-                var job = new Jobs.CheckInJob(clock, null);
+                var job = new Jobs.CheckInJob(null, null, null);
                 job.CheckIn();
             });
         }
 
         [Test]
-        public void ThrowArgumentNullExceptionOnNullClock()
-        {
-            Shouldly.Should.Throw<ArgumentNullException>(() =>
-            {
-                var job = new Jobs.CheckInJob(null, null);
-                job.CheckIn();
-            });
-        }
-
-        [Test]
-        public void LogStuff()
+        public void LogCorrectValue()
         {
             var clock = new FakeClock(Instant.FromDateTimeOffset(DateTimeOffset.Now));
             var logger = Substitute.For<ILogger>();
+            var client = Substitute.For<IRestClient>();
 
-            var job = new Jobs.CheckInJob(clock, logger);
+            var job = new Jobs.CheckInJob(clock, logger, client);
             job.CheckIn();
 
-            logger.Received().Information(Arg.Is("Job Running @ {now}"), Arg.Is(clock.Now));
+            logger.Received().Information(Arg.Is("Sending Payload @ {now}"), Arg.Is(clock.Now));
+        }
+
+        [Test]
+        public void PostRestPayload()
+        {
+            var clock = new FakeClock(Instant.FromDateTimeOffset(DateTimeOffset.Now));
+            var logger = Substitute.For<ILogger>();
+            var client = Substitute.For<IRestClient>();
+            client.BaseUrl = new Uri("http://localhost");
+
+            var job = new Jobs.CheckInJob(clock, logger, client);
+            job.CheckIn();
+
+            client.ReceivedWithAnyArgs().Post<Payload>(new RestRequest("/hello"));
         }
     }
 }

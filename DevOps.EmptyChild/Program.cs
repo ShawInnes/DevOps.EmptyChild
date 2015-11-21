@@ -1,9 +1,11 @@
-﻿using System.Configuration.Abstractions;
+﻿using System;
+using System.Configuration.Abstractions;
 using Autofac;
 using DevOps.EmptyChild.Services;
 using Hangfire;
 using Hangfire.MemoryStorage;
 using Owin;
+using RestSharp;
 using Serilog;
 using Topshelf;
 using Topshelf.Autofac;
@@ -24,9 +26,13 @@ namespace DevOps.EmptyChild
             var config = new ConfigurationManager();
             var domain = config.AppSettings.AppSetting<string>("emptychild:domain", () => "localhost", () => "localhost");
             var port = config.AppSettings.AppSetting<int>("emptychild:port", () => 19090, () => 19090);
+            var baseUri = config.AppSettings.AppSetting<string>("collector:url", () => "http://localhost/api", () => "http://localhost/api");
 
             var builder = new ContainerBuilder();
             builder.RegisterType<EmptyChildService>();
+            builder.RegisterType<RestClient>()
+                .OnActivated(c => c.Instance.BaseUrl = new Uri(baseUri))
+                .As<IRestClient>();
             builder.RegisterType<MemoryStorage>()
                 .OnActivated(c => JobStorage.Current = c.Instance)
                 .SingleInstance();
