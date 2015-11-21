@@ -1,26 +1,18 @@
-using System;
+using DevOps.EmptyChild.Jobs;
 using Hangfire;
-using Serilog;
 
 namespace DevOps.EmptyChild.Services
 {
-    internal class EmptyChildService
+    public class EmptyChildService
     {
         public void Start()
         {
-            Log.Information("Start()");
-
-            RecurringJob.AddOrUpdate(() => Log.Information("Hi, This is a Job"), Cron.Minutely);
-        }
-
-        public void AfterStart()
-        {
-            Log.Information("AfterStart()");
+            RecurringJob.AddOrUpdate<CheckInJob>(p => p.CheckIn(), Cron.Minutely);
         }
 
         public void Stop()
         {
-            Log.Information("Stop()");
+
         }
     }
 }

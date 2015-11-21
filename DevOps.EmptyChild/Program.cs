@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Configuration.Abstractions;
 using Autofac;
 using DevOps.EmptyChild.Services;
 using Hangfire;
@@ -25,7 +21,7 @@ namespace DevOps.EmptyChild
                 .WriteTo.LiterateConsole()
                 .CreateLogger();
 
-            var config = new System.Configuration.Abstractions.ConfigurationManager();
+            var config = new ConfigurationManager();
             var domain = config.AppSettings.AppSetting<string>("emptychild:domain", () => "localhost", () => "localhost");
             var port = config.AppSettings.AppSetting<int>("emptychild:port", () => 19090, () => 19090);
 

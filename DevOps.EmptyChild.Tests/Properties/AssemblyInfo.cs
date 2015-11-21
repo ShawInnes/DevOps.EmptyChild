@@ -4,11 +4,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("DevOps.EmptyChild")]
+[assembly: AssemblyTitle("DevOps.EmptyChild.Tests")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("DevOps.EmptyChild")]
+[assembly: AssemblyProduct("DevOps.EmptyChild.Tests")]
 [assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -19,7 +19,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("2c5d3803-e43f-44e7-b40b-27c0a70d28e2")]
+[assembly: Guid("d3a20e83-d243-4970-84c0-d0e4083fcc0c")]
 
 // Version information for an assembly consists of the following four values:
 //

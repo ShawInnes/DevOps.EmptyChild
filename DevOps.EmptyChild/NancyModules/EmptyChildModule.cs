@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Net;
+using System.Reflection;
 using Nancy;
 
 namespace DevOps.EmptyChild.NancyModules
@@ -23,17 +20,17 @@ namespace DevOps.EmptyChild.NancyModules
 
         private string GetVersionName()
         {
-            return System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            return Assembly.GetExecutingAssembly().GetName().Version.ToString();
         }
 
         private string GetHostName()
         {
-            return System.Net.Dns.GetHostName();
+            return Dns.GetHostName();
         }
 
         private string GetSystemName()
         {
-            return System.Reflection.Assembly.GetExecutingAssembly().GetName().Name;
+            return Assembly.GetExecutingAssembly().GetName().Name;
         }
     }
 }
