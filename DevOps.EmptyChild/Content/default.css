@@ -1,0 +1,31 @@
+﻿body {
+    background-color: black;
+}
+
+html, body, #container {
+    height: 100%;
+}
+
+#footer {
+    position: relative;
+}
+
+    #footer > a {
+        color: white;
+    }
+
+#container {
+    width: 100%;
+    position: relative;
+}
+
+    #container > img {
+        width: 100%;
+        max-width: 500px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        margin: auto;
+    }
