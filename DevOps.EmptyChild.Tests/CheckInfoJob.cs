@@ -3,6 +3,7 @@ using NodaTime;
 using NodaTime.Testing;
 using NUnit.Framework;
 using Serilog;
+using NSubstitute;
 
 namespace DevOps.EmptyChild.Tests
 {
@@ -12,12 +13,11 @@ namespace DevOps.EmptyChild.Tests
         [Test]
         public void ThrowArgumentNullExceptionOnNullLogger()
         {
-            IClock clock = new FakeClock(Instant.FromDateTimeOffset(DateTimeOffset.Now));
-            ILogger logger = null;
+            var clock = new FakeClock(Instant.FromDateTimeOffset(DateTimeOffset.Now));
 
             Shouldly.Should.Throw<ArgumentNullException>(() =>
             {
-                var job = new Jobs.CheckInJob(clock, logger);
+                var job = new Jobs.CheckInJob(clock, null);
                 job.CheckIn();
             });
         }
@@ -25,14 +25,23 @@ namespace DevOps.EmptyChild.Tests
         [Test]
         public void ThrowArgumentNullExceptionOnNullClock()
         {
-            IClock clock = null;
-            ILogger logger = null;
-
             Shouldly.Should.Throw<ArgumentNullException>(() =>
             {
-                var job = new Jobs.CheckInJob(clock, logger);
+                var job = new Jobs.CheckInJob(null, null);
                 job.CheckIn();
             });
+        }
+
+        [Test]
+        public void LogStuff()
+        {
+            var clock = new FakeClock(Instant.FromDateTimeOffset(DateTimeOffset.Now));
+            var logger = Substitute.For<ILogger>();
+
+            var job = new Jobs.CheckInJob(clock, logger);
+            job.CheckIn();
+
+            logger.Received().Information(Arg.Is("Job Running @ {now}"), Arg.Is(clock.Now));
         }
     }
 }
